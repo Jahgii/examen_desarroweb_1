@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^libros/$', home, name='home'),
     url(r'^libros/list$', lista_libros, name='list'),
-    url(r'^libros/detail$', detalle_libro, name='detail'),
+    url(r'^libros/detail/(?P<id>\d)/$', detalle_libro, name='detail'),
+    url(r'^libros/detail/(?P<id>\d0)/$', detalle_libro, name='detail'),
 ] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
