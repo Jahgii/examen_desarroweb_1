@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from .forms import LibroModelForm
 from .mixin import FormUserNeededMixin
 
@@ -17,6 +17,12 @@ from .models import Libro
 class LibroCreateView(FormUserNeededMixin, CreateView):
     form_class = LibroModelForm
     template_name = "CrearLibro_view.html"
+    success_url = "/libros/list"
+
+class LibroUpdateView(UpdateView):
+    queryset = Libro.objects.all()
+    form_class = LibroModelForm
+    template_name = "Actualizar_view.html"
     success_url = "/libros/list"
 
 def home(request):
