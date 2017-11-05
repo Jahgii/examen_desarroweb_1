@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from libros.views import home, lista_libros, detalle_libro, LibroCreateView, LibroUpdateView
+from libros.views import home, lista_libros, detalle_libro, LibroCreateView, LibroUpdateView, LibroDeleteView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^libros/detail/(?P<id>\d+)/$', detalle_libro, name='detail'),
     url(r'^libros/crear$', LibroCreateView.as_view(), name='Libro_create'),
     url(r'^libros/detail/(?P<pk>\d+)/actualizar/$', LibroUpdateView.as_view(), name='Libro_edit'),
+    url(r'^libros/detail/(?P<pk>\d+)/eliminar/$', LibroDeleteView.as_view(), name='Libro_delete'),
 ] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
