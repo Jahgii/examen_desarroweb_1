@@ -1,7 +1,7 @@
 from django.utils.timesince import timesince
 from rest_framework import serializers
 
-# from accounts.api.serializers import UserDisplaySerializer 
+# from accounts.api.serializers import UserDisplaySerializer
 from libros.models import  Libro
 
 class LibroModelSerializer(serializers.ModelSerializer):

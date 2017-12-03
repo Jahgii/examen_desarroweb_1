@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from accounts.views import UserRegisterView
 
 from libros.views import home, detalle_libro, LibroCreateView, LibroUpdateView, LibroDeleteView, LibroListView
 
@@ -28,5 +29,9 @@ urlpatterns = [
     url(r'^libros/detail/(?P<pk>\d+)/actualizar/$', LibroUpdateView.as_view(), name='Libro_edit'),
     url(r'^libros/detail/(?P<pk>\d+)/eliminar/$', LibroDeleteView.as_view(), name='Libro_delete'),
     url(r'^libros/list$', LibroListView.as_view(), name='Libros_list'),
+
+    url(r'^accounts/profile/$', LibroListView.as_view(), name='tweet_list'),
     url(r'^api/libros/', include ('libros.api.urls', namespace = 'libro_api')),
-] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    url(r'^accounts/register/$', UserRegisterView.as_view(), name='register'),
+    url(r'^', include('django.contrib.auth.urls')),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
