@@ -1,11 +1,11 @@
 from django.utils.timesince import timesince
 from rest_framework import serializers
 
-# from accounts.api.serializers import UserDisplaySerializer
+from accounts.api.serializers import UserDisplaySerializer
 from libros.models import  Libro
 
 class LibroModelSerializer(serializers.ModelSerializer):
-    # user = UserDisplaySerializer(read_only=True)
+    user = UserDisplaySerializer(read_only=True)
     date_display = serializers.SerializerMethodField()
     timesince = serializers.SerializerMethodField()
     class Meta:

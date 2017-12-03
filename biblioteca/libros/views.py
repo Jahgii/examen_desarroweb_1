@@ -15,18 +15,18 @@ from .models import Libro
 
 # Create your views here.
 
-class LibroCreateView(FormUserNeededMixin, CreateView):
+class LibroCreateView(LoginRequiredMixin, FormUserNeededMixin, CreateView):
     form_class = LibroModelForm
     template_name = "CrearLibro_view.html"
     success_url = "/libros/list"
 
-class LibroUpdateView(UpdateView):
+class LibroUpdateView(LoginRequiredMixin, UpdateView):
     queryset = Libro.objects.all()
     form_class = LibroModelForm
     template_name = "Actualizar_view.html"
     success_url = "/libros/list"
 
-class LibroDeleteView(LoginRequiredMixin, DeleteView):
+class LibroDeleteView(LoginRequiredMixin, FormUserNeededMixin, DeleteView):
     model = Libro
     template_name = "Delete_confirm.html"
     success_url = reverse_lazy("list")
