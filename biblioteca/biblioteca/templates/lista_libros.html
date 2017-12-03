@@ -19,7 +19,7 @@
 </nav>
 {% endblock %}
 
-{% block Libro %}
+{% block Libro %}x
 
 <div class="container">
   Buscar: {% include "Busqueda.html" %}
@@ -35,7 +35,7 @@
         <p></p>
         <p>
           <a class="btn btn-primary" href="detail/{{i.id}}" role="button">Más información</a>
-          <a class="btn btn-danger" href="/libros/detail/{{i.id}}/eliminar/" role="button">Eliminar</a>
+          <a class="btn btn-danger" href="/libros/detail/{{i.id}}/eliminar/" role="button">Eliminar</a><br>
           <a class="btn btn-success" href="/libros/detail/{{i.id}}/actualizar/" role="button">Actualizar</a>
         </p>
       </div>

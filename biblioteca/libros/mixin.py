@@ -9,4 +9,5 @@ class FormUserNeededMixin(object):
             return super(FormUserNeededMixin, self).form_valid(form)
         else:
             form._errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(["El usuario debe estar logueado para continuar"] )
-            return self.form_invalid(form)
+
+        return self.form_invalid(form)
