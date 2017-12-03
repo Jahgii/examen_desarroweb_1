@@ -1,11 +1,11 @@
 from django.utils.timesince import timesince
 from rest_framework import serializers
 
-#from accounts.api.serializers import UserDisplaySerializer Esta importación se hace más adelante, en el paso 5
-from tweet.models import  Libro
+# from accounts.api.serializers import UserDisplaySerializer 
+from libros.models import  Libro
 
 class LibroModelSerializer(serializers.ModelSerializer):
-    user = UserDisplaySerializer(read_only=True)
+    # user = UserDisplaySerializer(read_only=True)
     date_display = serializers.SerializerMethodField()
     timesince = serializers.SerializerMethodField()
     class Meta:
@@ -19,7 +19,9 @@ class LibroModelSerializer(serializers.ModelSerializer):
             'ISBN',
             'precio',
             'created',
-            'update'
+            'update',
+            'date_display',
+            'timesince'
         ]
 
     def get_date_display(self, obj):

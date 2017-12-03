@@ -2,7 +2,7 @@ from django.db.models import Q
 from rest_framework import generics
 from rest_framework import permissions
 
-from tweet.models import Libro
+from libros.models import Libro
 from .pagination import StandardResultPagination
 from .serializers import LibroModelSerializer
 
