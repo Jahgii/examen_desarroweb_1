@@ -23,7 +23,7 @@ class LibroListAPIView(generics.ListAPIView):
         if query is not None:
             qs = qs.filter(
                             Q(Nombre__icontains=query) |
-                            Q(Autor__username__icontains=query) |
+                            Q(Autor__icontains=query) |
                             Q(user__username__icontains=query)
                           )
         return qs

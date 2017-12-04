@@ -1,0 +1,115 @@
+{% extends "base.html"%}
+{%block script%}
+<script>
+
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+$(document).ready(function(){
+
+  console.log("working");
+  var query = getParameterByName('q');
+  console.log(query);
+  var nextLibroUrl;
+
+  function attachLibro(librosValue, prepend){
+    var librosDateDisplay = librosValue.timesince;
+    var librosContent = librosValue.Nombre;
+    var librosUser = librosValue.user.username;
+    var librosId = librosValue.id;
+      if (prepend==true){
+        $("#ajax_libros").prepend(
+            "<h4>"+ librosContent + "</h4>" +
+            "<div class='media'>"+
+              "<div class='content'>"+
+                "<p>"+
+                  "<a href='/tweet/detailc/'"+librosId+"'/'>View</a> "+" | "+librosUser+ "&nbsp;"+ "|" +
+                  librosDateDisplay+ " | "+
+                "</p>"+
+              "</div>"+
+            "</div>"
+        )
+      }else{
+        $("#ajax_libros").append(
+            "<h4>"+ librosContent + "</h4>" +
+            "<div class='media'>"+
+              "<div class='content'>"+
+                "<p>"+
+                  "<a href='/tweet/detailc/"+librosId+"'/'>View</a> "+" | "+librosUser+ "&nbsp;"+ "|" +
+                  librosDateDisplay+ " | " +"<a href='/tweet/detail/"+librosId+"/edit'>Edit</a> "+
+                    " | " +"<a href='/tweet/detail/"+librosId+"/delete'>Borrar</a> "+
+                "</p>"+
+              "</div>"+
+            "</div>"
+        )
+      }
+    }
+    function fetchLibros(url){
+      console.log("fetching...");
+      var fetchUrl;
+      if (!url){
+        fetchUrl='/api/libros/?q=somequery';
+      }else{
+        fetchUrl=url
+      }
+      $.ajax({
+        url: fetchUrl,
+        data:{
+          'q': query
+        },
+        method: "GET",
+        success: function(data){
+          console.log(data);
+          nextLibroUrl = data.next;
+          $.each(data.results, function(key, value){
+            var librosKey = key;
+            attachLibro(value);
+          });
+        },
+        error: function(data){
+          console.log("error");
+          console.log(data);
+        }
+      });
+    }
+
+    fetchLibros();
+
+    $("#loadmore").click(function(event){
+      event.preventDefault();
+      console.log("click me")
+      if (nextLibroUrl){
+        fetchLibros(nextLibroUrl);
+      }
+      // Cargar mas tweets
+    })
+  });
+
+</script>
+{%endblock script%}
+
+
+{%block Libro%}
+
+<div class="container">
+  Buscar: {% include "Busqueda.html" %}
+</div>
+
+{% if not request.GET.q %}
+  <div class="">
+    {%include "form.html" with form=create_form action_url=create_url btn_title='Tweet' form_id='tweet-form'%}
+  </div>
+{% endif %}
+<article class="post" id="ajax_libros">
+</article>
+<a href="#" id='loadmore'>Cargar mas tweets</a>
+{% for object in object_list %}
+
+{% endfor %}
+{%endblock%}

@@ -27,10 +27,13 @@
     {% block Libro %}
       <div class="jumbotron">
         <div class="col-sm-8 mx-auto">
-          <form class="form" method="POST" action="">
+          <form {%if form_id%} id='{{form_id}}' {%endif%} class="form"  method="POST" action="{% if action_url %}{{ action_url }}{% endif %}" >
             {% csrf_token %}
-            {{form.as_p}}
-            <input class="btn btn-success" type="submit" name="" value="Agregar">
+
+            <div class="control">
+              {{form.as_p}}
+              <input class="button is-primary is-block is-alt is-large" type="submit" name="" value="Agregar">
+            </div>
           </form>
         </div>
       </div>

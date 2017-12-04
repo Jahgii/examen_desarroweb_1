@@ -32,19 +32,20 @@ class LibroDeleteView(LoginRequiredMixin, FormUserNeededMixin, DeleteView):
     success_url = reverse_lazy("list")
 
 class LibroListView(ListView):
-    template_name = "lista_libros.html"
+    template_name = "libro_list_ajax.html"
 
     def get_queryset(self, *args, **kwargs):
-        qs = Libro.objects.all()
+        qs = Libro.objects.all().order_by("-pk")
         print self.request.GET
         query = self.request.GET.get("q", None)
         if query is not None:
             qs = qs.filter(
             Q(Nombre__icontains=query)|
-            Q(Autor__icontains=query)|
+            Q(Autor__icontains=query) |
             Q(user__username__icontains=query)
             )
         return qs
+
     def get_context_data(self, *args, **kwargs):
          context = super(LibroListView, self).get_context_data(*args, **kwargs)
          print context
