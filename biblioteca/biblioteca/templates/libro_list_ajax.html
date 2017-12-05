@@ -1,4 +1,27 @@
 {% extends "base.html"%}
+
+{% block title %}Libros{% endblock %}
+
+{% block Barra %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#"> Lista de libros <span class="sr-only">(current)</span></a>
+      </li>
+      <li><a class="nav-link" href="/libros/crear"> Agregar Libro <span class="sr-only">(current)</span></a></li>
+      <li><a class="nav-link" href="/accounts/register"> Registrarse <span class="sr-only">(current)</span></a></li>
+      <li><a class="nav-link" href="/login"> Logearse <span class="sr-only">(current)</span></a></li>
+      <li><a class="nav-link" href="/logout"> Salir <span class="sr-only">(current)</span></a></li>
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
 {%block script%}
 <script>
 
@@ -17,36 +40,51 @@ $(document).ready(function(){
   var query = getParameterByName('q');
   console.log(query);
   var nextLibroUrl;
+  var con = 0;
 
   function attachLibro(librosValue, prepend){
     var librosDateDisplay = librosValue.timesince;
     var librosContent = librosValue.Nombre;
     var librosUser = librosValue.user.username;
     var librosId = librosValue.id;
+    var librosAutor = librosValue.Autor;
       if (prepend==true){
         $("#ajax_libros").prepend(
-            "<h4>"+ librosContent + "</h4>" +
-            "<div class='media'>"+
-              "<div class='content'>"+
-                "<p>"+
-                  "<a href='/tweet/detailc/'"+librosId+"'/'>View</a> "+" | "+librosUser+ "&nbsp;"+ "|" +
-                  librosDateDisplay+ " | "+
-                "</p>"+
+
+          "<div class='card-deck'>"+
+            "<div class='card'>"+
+              "<img class='card-img-top' src='...' alt=''>"+
+              "<div class='card-block'>"+
+                "<h4 class='card-title'>Titulo: " + librosContent + "</h4>"+
+                "<p class='card-text'>Usuario: " + librosUser + "</p>"+
+                "<p class='card-text'>Autor: " + librosAutor + "</p>"+
               "</div>"+
-            "</div>"
+              "<div class='card-footer'>"+
+                "<small class='text-muted'>Dia creado: " + librosDateDisplay + "</small>"+
+              "</div>"+
+            "</div>"+
+          "</div>"+
+          "<br>"
         )
       }else{
         $("#ajax_libros").append(
-            "<h4>"+ librosContent + "</h4>" +
-            "<div class='media'>"+
-              "<div class='content'>"+
-                "<p>"+
-                  "<a href='/tweet/detailc/"+librosId+"'/'>View</a> "+" | "+librosUser+ "&nbsp;"+ "|" +
-                  librosDateDisplay+ " | " +"<a href='/tweet/detail/"+librosId+"/edit'>Edit</a> "+
-                    " | " +"<a href='/tweet/detail/"+librosId+"/delete'>Borrar</a> "+
+          "<div class='card-deck'>"+
+            "<div class='card'>"+
+              "<img class='card-img-top' src='...' alt=''>"+
+              "<div class='card-block'>"+
+                "<h4 class='card-title'>Titulo: " + librosContent + "</h4>"+
+                "<p class='card-text'>Usuario: " + librosUser + "</p>"+
+                "<p class='card-text'>Autor: " + librosAutor + "</p>"+
+              "</div>"+
+              "<div class='card-footer'>"+
+              "<p>"+
+                "<small class='text-muted'>Dia creado: " + librosDateDisplay + "</small>"+
+                "<a href='/libros/detail/'"+librosId+"'/'>  Detalles</a> "+
                 "</p>"+
               "</div>"+
-            "</div>"
+            "</div>"+
+          "</div>"+
+          "<br>"
         )
       }
     }
@@ -89,26 +127,58 @@ $(document).ready(function(){
       }
       // Cargar mas tweets
     })
+
+    $("#libro-form").submit(function(event){
+     event.preventDefault();
+     var this_ = $(this);
+     console.log(event);
+     console.log(this_.serialize());
+     var formData = this_.serialize();
+
+       $.ajax({
+         url: "/api/libros/create/",
+         data:formData,
+         method: "POST",
+         success: function(data){
+           this_.find("#id_content").val("");
+           attachLibro(data, true);
+         },
+         error: function(data){
+           console.log("error");
+           console.log(data);
+           console.log(data.statusText);
+           console.log(data.status);
+         }
+       });
+   })
+
+
   });
 
 </script>
 {%endblock script%}
-
-
 {%block Libro%}
 
 <div class="container">
   Buscar: {% include "Busqueda.html" %}
 </div>
-
 {% if not request.GET.q %}
   <div class="">
-    {%include "form.html" with form=create_form action_url=create_url btn_title='Tweet' form_id='tweet-form'%}
+    {%include "form.html" with form=create_form action_url=create_url btn_title='Libro' form_id='libro-form'%}
   </div>
 {% endif %}
-<article class="post" id="ajax_libros">
-</article>
-<a href="#" id='loadmore'>Cargar mas tweets</a>
+<div class="container">
+  <h1>Libros disponibles</h1>
+  <div class="container" class="post" id="ajax_libros">
+    <hr>
+  </div>
+  <hr>
+</div>
+
+<div class="container">
+  <a class="btn btn-success" href="#" id='loadmore'>Cargar mas libros</a>
+</div>
+
 {% for object in object_list %}
 
 {% endfor %}

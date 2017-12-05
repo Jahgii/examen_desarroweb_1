@@ -29,7 +29,7 @@ class LibroUpdateView(LoginRequiredMixin, UpdateView):
 class LibroDeleteView(LoginRequiredMixin, FormUserNeededMixin, DeleteView):
     model = Libro
     template_name = "Delete_confirm.html"
-    success_url = reverse_lazy("list")
+    success_url = reverse_lazy("Libros_list")
 
 class LibroListView(ListView):
     template_name = "libro_list_ajax.html"
